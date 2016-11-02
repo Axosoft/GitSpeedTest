@@ -1,0 +1,9 @@
+{
+  "name": "speedtest",
+  "version": "0.0.1",
+  "main": "index.js",
+  "dependencies": {
+    "fs-extra": "^1.0.0",
+    "nodegit": "^0.16.0"
+  }
+}

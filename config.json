@@ -1,0 +1,8 @@
+{
+  "linux": {
+    "url": "https://github.com/torvalds/linux"
+  },
+  "git": {
+    "url": "https://github.com/git/git"
+  }
+}

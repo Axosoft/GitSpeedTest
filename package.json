@@ -4,6 +4,8 @@
   "main": "index.js",
   "dependencies": {
     "fs-extra": "^1.0.0",
-    "nodegit": "^0.16.0"
+    "lodash": "^4.16.6",
+    "nodegit": "^0.16.0",
+    "randomstring": "^1.1.5"
   }
 }

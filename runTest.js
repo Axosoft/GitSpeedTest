@@ -1,20 +1,34 @@
 const nodegit = require('nodegit');
 const fse = require('fs-extra');
+const fp = require('lodash/fp');
 
 const repoConfig = require('./config')[process.argv[3]];
 
-const path = `./test/${process.argv[2]}`;
-const test = require(path);
-
 fse.removeSync('temp');
 
-const preTest = new Date();
+const path = `./test/${process.argv[2]}`;
+Promise.resolve(require(path)(repoConfig))
+  .then((testOrTests) => {
+    const tests = fp.isArray(testOrTests) ? testOrTests : [ testOrTests ];
 
-test(repoConfig)
-  .catch(function(error) {
-    console.log(error);
+    return fp.reduce(
+      (promise, test) => promise.then(() =>
+        {
+          console.log(`starting test ${test.name}`);
+          const preTest = new Date();
+
+          return Promise.resolve(test())
+            .catch(function(error) {
+              console.log(error);
+            })
+            .then(() => {
+              const afterTest = new Date() - preTest;
+              console.log(`${afterTest / 1000} s`);
+            });
+        }
+      ),
+      Promise.resolve(),
+      tests
+    );
   })
-  .then(() => {
-    const afterTest = new Date() - preTest;
-    console.log(`${afterTest / 1000} s`);
-  });
+  .catch(error => console.log(error));

@@ -3,15 +3,16 @@ const nodegit = require('nodegit');
 const checkoutRepoAndCreateLargeFile = require('./util/checkoutRepoAndCreateLargeFile');
 
 module.exports =
-  (repoConfig) => {
-    checkoutRepoAndCreateLargeFile(repoConfig);
+  (repoConfig, argv) => {
+    checkoutRepoAndCreateLargeFile(repoConfig, argv);
 
     return nodegit.Repository.open('temp')
       .then((repo) =>
         repo.index()
           .then((index) => {
             function stageTest() {
-              return index.addByPath('randomfile.txt');
+              return index.addAll('randomfile*.txt')
+                .then(() => index.write());
             }
 
             function commitTest() {
@@ -26,7 +27,7 @@ module.exports =
                       repo.defaultSignature(),
                       repo.defaultSignature(),
                       null,
-                      'Add randomfile.txt',
+                      'Add randomfiles',
                       tree,
                       1,
                       [ headCommit ]

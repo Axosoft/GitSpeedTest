@@ -7,7 +7,7 @@ module.exports =
     checkoutRepoAndCreateLargeFile(repoConfig);
 
     function stageTest() {
-      return childProcess.execSync('git --git-dir=temp/.git add temp/randomfile.txt -f');
+      return childProcess.execSync('git --git-dir=temp/.git --work-tree=temp add randomfile.txt -f');
     }
 
     function commitTest() {
